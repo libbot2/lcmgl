@@ -8,7 +8,7 @@
 #include <sys/time.h>
 #include <zlib.h> //for texture compression //TODO: is this portable?
 
-#include "lcmtypes/bot_lcmgl_data_t.h"
+#include "bot_lcmgl_data_t.h"
 
 
 #define BOT_GL_DRAW_TEXT_DROP_SHADOW      1
