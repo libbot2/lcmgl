@@ -2,10 +2,10 @@ set(sources
   bot_lcmgl/LCMGL.java
 )
 
-add_jar(bot2-lcmgl-client-java
-  OUTPUT_NAME bot2-lcmgl
-  INCLUDE_JARS bot2-lcmgl-lcmtypes-java lcm-java
+add_jar(${PROJECT_NAME}-client-java
+  OUTPUT_NAME ${PROJECT_NAME}
+  INCLUDE_JARS ${PROJECT_NAME}-lcmtypes-java lcm-java
   SOURCES ${sources}
 )
 
-install_jar(bot2-lcmgl-client-java share/java)
+install_jar(${PROJECT_NAME}-client-java share/java)

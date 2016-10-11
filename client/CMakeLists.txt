@@ -6,24 +6,24 @@ set(install_headers
   lcmgl.h
 )
 
-add_library(bot2-lcmgl-client ${sources})
+add_library(${PROJECT_NAME}-client ${sources})
 
-target_include_directories(bot2-lcmgl-client
+target_include_directories(${PROJECT_NAME}-client
   INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   PRIVATE
   ${ZLIB_INCLUDE_DIRS}
 )
 
-target_link_libraries(bot2-lcmgl-client
+target_link_libraries(${PROJECT_NAME}-client
   PUBLIC
-  bot2-lcmgl-lcmtypes
+  ${PROJECT_NAME}-lcmtypes
   lcm
   PRIVATE
   ${ZLIB_LIBRARIES}
 )
 
-install(TARGETS bot2-lcmgl-client
+install(TARGETS ${PROJECT_NAME}-client
   EXPORT ${PROJECT_NAME}Targets
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib${LIB_SUFFIX}

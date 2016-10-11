@@ -1,6 +1,8 @@
 project(bot2-lcmgl)
 cmake_minimum_required(VERSION 3.1)
 
+include(CMakePackageConfigHelpers)
+
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
@@ -54,3 +56,53 @@ endif()
 if(LCMGL_ENABLE_JAVA)
   add_subdirectory(java)
 endif()
+
+# Set package path for platform
+if(WIN32)
+  set(CONFIG_INSTALL_DIR CMake)
+else()
+  set(CONFIG_INSTALL_DIR lib${LIB_SUFFIX}/${PROJECT_NAME}/cmake)
+endif()
+
+# Export Java targets (note: must precede configure_package_config_file)
+if(LCMGL_ENABLE_JAVA)
+  set(LCMGL_INCLUDE_JAVA
+    "include(\${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}JavaTargets.cmake)"
+  )
+
+  export_jars(
+    TARGETS ${PROJECT_NAME}-client-java
+    FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}JavaTargets.cmake
+   )
+  install_jar_exports(
+    TARGETS ${PROJECT_NAME}-client-java
+    FILE ${PROJECT_NAME}JavaTargets.cmake
+    DESTINATION ${CONFIG_INSTALL_DIR}
+  )
+endif()
+
+# Create package configuration file
+configure_package_config_file(
+  ${PROJECT_SOURCE_DIR}/${PROJECT_NAME}Config.cmake.in
+  ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+  INSTALL_DESTINATION ${CONFIG_INSTALL_DIR}
+)
+
+# Export targets for build directory
+export(TARGETS
+  ${PROJECT_NAME}-lcmtypes
+  ${PROJECT_NAME}-lcmtypes-cpp
+  ${PROJECT_NAME}-client
+  FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake
+)
+
+# Install package configuration files
+install(EXPORT ${PROJECT_NAME}Targets
+  DESTINATION ${CONFIG_INSTALL_DIR}
+  FILE ${PROJECT_NAME}Targets.cmake
+)
+
+install(FILES
+  ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+  DESTINATION ${CONFIG_INSTALL_DIR}
+)
